@@ -1,28 +1,18 @@
-import axios from "react-native-axios";
-import { useEffect, useState } from "react";
+import axios, { AxiosResponse } from "axios";
 
-const api = axios.create({
-  baseURL: `http://107.178.219.190:8080`,
+const apiUser = axios.create({
+    baseURL: ' http://107.178.219.190:8080/api'
 });
 
-export function FuncionarioAPIFunc(url) {
-  const [carregando, setCarregando] = useState(true);
-  const [dataFunc, setDataFunc] = useState([]);
-  const [error, setError] = useState(null);
+export interface userList {
+    
+            id: number, 
+            login : string,
+            password: string,
+}
 
-  useEffect(() => {
-    api
-      .get(url)
-      .then((response) => {
-        setDataFunc(response.data);
-      })
-      .catch((error) => {
-        setError(error);
-      })
-      .finally(() => {
-        setCarregando(false);
-      });
-  }, []);
+export function getUser(): Promise<AxiosResponse> {
+    let url = `/users`;
 
-  return { dataFunc, carregando, error };
+    return apiUser.get(url);
 }

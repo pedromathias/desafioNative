@@ -20,6 +20,8 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 14,
         paddingVertical: 20,
         height: '55%',
-        marginTop: 'auto'
-    }
+        marginTop: 'auto',
+
+    },
+
 })

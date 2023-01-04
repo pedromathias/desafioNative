@@ -13,14 +13,19 @@ import {
 import { styles } from "./styles";
 import { Entypo } from "@expo/vector-icons";
 import LogoNeki from "../../assets/image/logoneki.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../../context/Auth";
 
-export const Cadastro = () => {
+export const Cadastro = ({navigation}) => {
   const [hidePass, setHidePass] = useState(true);
   const [hidePassConfirm, setHidePassConfirm] = useState(true);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("")
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  
+  const {auth} = React.useContext(AuthContext);
+  const {setAuth} = React.useContext(AuthContext);
 
   const baseUrl = "http://107.178.219.190:8080";
 
@@ -37,30 +42,44 @@ export const Cadastro = () => {
   };
 
   const onSubmitFormHandler = async () => {
-    setIsLoading(true); 
-    axios
-      .post(`${baseUrl}/api/users`, {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(`${baseUrl}/api/users`, {
         login,
         password,
-      })
-      .then((response) => {
+      });
+      if (response.status === 201) {
         alert(` You have created: ${JSON.stringify(response.data)}`);
         setIsLoading(false);
         setLogin("");
         setPassword("");
         setPasswordConfirm("");
-      })
-      .catch((error) => {
-        console.log("erro login", error);
-      });
+        //SetAuth(true);
+
+        await AsyncStorage.setItem("auth",setAuth(true))
+      } else {
+        throw new Error("An error has occurred");
+      }
+      await AsyncStorage.setItem("id",JSON.stringify(response.data));
+      const id = await AsyncStorage.getItem("id");
+      console.log(id);
+      
+    } catch (error) {
+      alert("An error has occurred");
+      setIsLoading(false);
+    }
   };
 
-  const CriarConta = () =>{
-    if(password == passwordConfirm ? onSubmitFormHandler() : alert("As senhas não coincidem") ){
-    
+
+
+  const CriarConta = () => {
+    if (
+      password == passwordConfirm
+        ? onSubmitFormHandler()
+        : alert("As senhas não coincidem")
+    ) {
     }
-}
-   
+  };
 
   return (
     <View style={styles.container}>
@@ -114,8 +133,7 @@ export const Cadastro = () => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity
-        onPress={CriarConta} 
-        
+        onPress={CriarConta}
         disabled={isLoading}
         style={styles.loginbutton}
       >
