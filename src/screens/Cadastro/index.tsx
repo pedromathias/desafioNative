@@ -54,11 +54,8 @@ export const Cadastro = ({navigation}) => {
         setLogin("");
         setPassword("");
         setPasswordConfirm("");
-        //SetAuth(true);
+        setAuth(true);
 
-        await AsyncStorage.setItem("auth",setAuth(true))
-      } else {
-        throw new Error("An error has occurred");
       }
       await AsyncStorage.setItem("id",JSON.stringify(response.data));
       const id = await AsyncStorage.getItem("id");

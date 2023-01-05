@@ -27,14 +27,13 @@ export const ModalSkills = ({ isSelectedModal, setIsSelectedModal }) => {
   const [data, setData] = useState();
   const [skillsData, setSkillsData] = useState();
 
-  const {auth} = React.useContext(AuthContext);
-  const {setAuth} = React.useContext(AuthContext);
+  const { auth } = React.useContext(AuthContext);
+  const { setAuth } = React.useContext(AuthContext);
 
   const LogOut = () => {
-    AsyncStorage.clear()
-    setAuth(false)
-
-  }
+    AsyncStorage.clear();
+    setAuth(false);
+  };
 
   React.useEffect(() => {
     get();
@@ -79,7 +78,7 @@ export const ModalSkills = ({ isSelectedModal, setIsSelectedModal }) => {
           renderItem={({ item }) => {
             return (
               <>
-                <CardSkils name={item.name} image={{ uri: item.imageUrl }} />
+                <CardSkils id={item.id} name={item.name} image={{ uri: item.imageUrl }} />
 
                 <View style={{ width: 30 }} />
               </>
@@ -87,7 +86,13 @@ export const ModalSkills = ({ isSelectedModal, setIsSelectedModal }) => {
           }}
         />
 
-        <Entypo onPress={LogOut} style={{position:'absolute',right:20, bottom:20}} name="log-out" size={30} color="white" />
+        <Entypo
+          onPress={LogOut}
+          style={{ position: "absolute", right: 20, bottom: 20 }}
+          name="log-out"
+          size={30}
+          color="white"
+        />
       </View>
     </Modal>
   );
